@@ -22,7 +22,7 @@ If **Account lockout duration** is less than 15 minutes (excluding `0`), this is
 Set **Account lockout duration** to **15 minutes or greater**.  
 A value of `0` (manual unlock by admin) is also acceptable.  
 
-**Script:** [WN10-AC-000005.ps1](WN10-AC-000005.ps1)  
+**Script:** [WN10-AC-000005.ps1](STIGS/WN10-AC-000005.ps1)  
 
 **Reference:**  
 - [STIG-A-View – Windows 10 V3R1](https://stigaview.com/products/win10/v3r1/)  
@@ -39,7 +39,7 @@ If the **Account lockout threshold** is `0` or greater than `3`, this is a findi
 **Fix:**  
 Set **Account lockout threshold** to **3 invalid attempts or less** (excluding `0`).  
 
-**Script:** [WN10-AC-000010.ps1](WN10-AC-000010.ps1)  
+**Script:** [WN10-AC-000010.ps1](STIGS/WN10-AC-000010.ps1)  
 
 **Reference:**  
 - [STIG-A-View – Windows 10 V3R1](https://stigaview.com/products/win10/v3r1/)  
@@ -56,7 +56,7 @@ If **Enforce password history** is less than `24`, this is a finding.
 **Fix:**  
 Configure Windows to remember the last **24 passwords**.  
 
-**Script:** [WN10-AC-000020.ps1](WN10-AC-000020.ps1)  
+**Script:** [WN10-AC-000020.ps1](STIGS/WN10-AC-000020.ps1)  
 
 **Reference:**  
 - [STIG-A-View – Windows 10 V3R1](https://stigaview.com/products/win10/v3r1/)  
@@ -73,17 +73,7 @@ If **Maximum log size (KB)** for the Application log is less than `32,768`, this
 **Fix:**  
 Set **Maximum log size (KB)** to **32,768 or greater**.  
 
-**Script:** [WN10-AU-000500.ps1](WN10-AU-000500.ps1)  
+**Script:** [WN10-AU-000500.ps1](STIGS/WN10-AU-000500.ps1)  
 
 **Reference:**  
 - [STIG-A-View – Windows 10 V3R1](https://stigaview.com/products/win10/v3r1/)  
-
----
-
-## 🚀 Usage
-
-Run each script with **administrative privileges** on Windows 10. Example:
-
-```powershell
-PS C:\> .\WN10-AC-000010.ps1
-
