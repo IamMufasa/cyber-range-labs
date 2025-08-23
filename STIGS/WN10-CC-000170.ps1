@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
-    Enforces STIG requirement WN10-00-000090 by ensuring accounts are not configured 
-    with the "Password never expires" option and forces a password change at next logon.
+    Enforces STIG requirement WN10-CC-000170 by enabling the setting that 
+    allows Microsoft accounts to be optional for modern style apps.
 
 .NOTES
     Author          : Richard Akpan
@@ -9,10 +9,10 @@
     GitHub          : github.com/IamMufasa
     Date Created    : 2025-08-23
     Last Modified   : 2025-08-23
-    Version         : 1.2
+    Version         : 1.0
     CVEs            : N/A
     Plugin IDs      : N/A
-    STIG-ID         : WN10-00-000090
+    STIG-ID         : WN10-CC-000170
 
 .TESTED ON
     Date(s) Tested  : 
@@ -22,25 +22,29 @@
 
 .USAGE
     Run with administrative privileges:
-        PS C:\> .\WN10-00-000090.ps1
+        PS C:\> .\WN10-CC-000170.ps1
 #>
 
 # ------------------- PowerShell Script -------------------
 
-# Get all local enabled users (excluding Administrator and Guest)
-$Users = Get-LocalUser | Where-Object { $_.Enabled -and $_.Name -notin @("Administrator","Guest") }
+$RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Policies\System"
+$ValueName = "MSAOptional"
+$DesiredValue = 1  # 1 = Microsoft accounts optional (STIG-compliant)
 
-foreach ($User in $Users) {
-    try {
-        # Ensure password expiration is enforced
-        Set-LocalUser -Name $User.Name -PasswordNeverExpires $false
-        
-        # Force password change at next logon
-        net user $($User.Name) /logonpasswordchg:yes | Out-Null
+# Ensure the registry path exists
+If (-not (Test-Path $RegPath)) {
+    New-Item -Path $RegPath -Force | Out-Null
+}
 
-        Write-Output "Updated: $($User.Name) - Password expiration enforced and change required at next logon."
-    }
-    catch {
-        Write-Output "Error updating ${User}: $($_)"
-    }
+# Get current value
+$CurrentValue = (Get-ItemProperty -Path $RegPath -Name $ValueName -ErrorAction SilentlyContinue).$ValueName
+Write-Output "Current MSAOptional value: $CurrentValue"
+
+# Apply fix if not compliant
+If ($CurrentValue -ne $DesiredValue) {
+    Set-ItemProperty -Path $RegPath -Name $ValueName -Value $DesiredValue -Type DWord
+    Write-Output "Policy updated: Microsoft accounts are now optional for modern style apps (STIG-compliant)."
+}
+else {
+    Write-Output "Already compliant: Microsoft accounts are optional for modern style apps."
 }
