@@ -27,11 +27,11 @@
 
 # ------------------- PowerShell Script -------------------
 
-$RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Policies\System"
+$RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 $ValueName = "MSAOptional"
 $DesiredValue = 1  # 1 = Microsoft accounts optional (STIG-compliant)
 
-# Ensure the registry path exists
+# Ensure registry path exists
 If (-not (Test-Path $RegPath)) {
     New-Item -Path $RegPath -Force | Out-Null
 }
@@ -47,4 +47,4 @@ If ($CurrentValue -ne $DesiredValue) {
 }
 else {
     Write-Output "Already compliant: Microsoft accounts are optional for modern style apps."
-}
+} 
