@@ -27,24 +27,10 @@
 
 # ------------------- PowerShell Script -------------------
 
-$RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+ $RegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
 $ValueName = "MSAOptional"
-$DesiredValue = 1  # 1 = Microsoft accounts optional (STIG-compliant)
+$DesiredValue = 1
 
-# Ensure registry path exists
-If (-not (Test-Path $RegPath)) {
-    New-Item -Path $RegPath -Force | Out-Null
-}
-
-# Get current value
-$CurrentValue = (Get-ItemProperty -Path $RegPath -Name $ValueName -ErrorAction SilentlyContinue).$ValueName
-Write-Output "Current MSAOptional value: $CurrentValue"
-
-# Apply fix if not compliant
-If ($CurrentValue -ne $DesiredValue) {
-    Set-ItemProperty -Path $RegPath -Name $ValueName -Value $DesiredValue -Type DWord
-    Write-Output "Policy updated: Microsoft accounts are now optional for modern style apps (STIG-compliant)."
-}
-else {
-    Write-Output "Already compliant: Microsoft accounts are optional for modern style apps."
-} 
+If (-not (Test-Path $RegPath)) { New-Item -Path $RegPath -Force | Out-Null }
+Set-ItemProperty -Path $RegPath -Name $ValueName -Value $DesiredValue -Type DWord
+Write-Output "Set MSAOptional to 1 (Microsoft accounts are optional). Run 'gpupdate /force' and reboot for effect." 
